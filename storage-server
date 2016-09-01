@@ -1,0 +1,23 @@
+echo "Enter the IP address of Proxy Server:: "
+read ADDRESS
+sudo mkdir -p /var/run/swift
+sudo chown -R ubuntu:ubuntu /var/run/swift
+cd /etc/swift/
+sudo rm -rf *.builder *.gz
+mv test.conf proxy-server.conf /tmp/
+cd backups
+sudo rm -rf *
+cd /etc/swift/
+sudo sed -i "s/127.0.0.1/$ADDRESS/" container-sync-realms.conf
+
+nic=`ls -og /sys/class/net | grep -v virtual | awk '{print $7}'`
+MY_PRIVATE_IP=`ip a | grep $nic | grep inet | awk '{print $2}' | awk -F'/' '{print $1}'`
+
+cd /etc/swift/account-server/
+sudo sed -i "s/127.0.0.1/$MY_PRIVATE_IP/" *.conf
+
+cd /etc/swift/container-server/
+sudo sed -i "s/127.0.0.1/$MY_PRIVATE_IP/" *.conf
+
+cd /etc/swift/object-server/
+sudo sed -i "s/127.0.0.1/$MY_PRIVATE_IP/" *.conf
