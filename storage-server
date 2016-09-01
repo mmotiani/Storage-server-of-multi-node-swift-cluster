@@ -1,7 +1,7 @@
 echo "Enter the IP address of Proxy Server:: "
 read ADDRESS
 sudo mkdir -p /var/run/swift
-sudo chown -R ubuntu:ubuntu /var/run/swift
+sudo chown -R $USER:$USER /var/run/swift
 cd /etc/swift/
 sudo rm -rf *.builder *.gz
 mv test.conf proxy-server.conf /tmp/
